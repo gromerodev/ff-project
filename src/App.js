@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Header from "./components/Header";
+import EventForm from "./components/EventForm";
 
 class App extends Component {
   render() {
+    let message = "";
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
+        <Header message={message} />
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          Welcome to On The Fly! Find an event near you!
         </p>
       </div>
     );

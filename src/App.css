@@ -1,28 +1,55 @@
-.App {
+.EventForm {
+  border-radius: 15px;
+  background: white;
+  padding: 55px;
+  width: 500px;
   text-align: center;
+  margin-top: 35px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.form-title {
+  text-align: center;
+  color: Blue;
+  margin-top: 0px;
+  padding: 0px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
+input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 5px;
+  margin-bottom: 15px;
+}
+
+.btn {
   color: white;
+  background: transparent;
+  border: 2px solid #0099cc;
+  border-radius: 6px;
+  border: none;
+  color: blue;
+  padding: 16px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.btn:hover {
+  background-color: black;
+  color: white;
 }
