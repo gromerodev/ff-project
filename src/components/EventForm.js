@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {geolocated} from 'react-geolocated';
+import { geolocated } from "react-geolocated";
 import Geocode from "react-geocode";
 
-
 class EventForm extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -31,38 +29,46 @@ class EventForm extends Component {
   //     zipcode: ""
   //   }
   // };
-  // Check the status of a single permission 
-  // componentDidMount() { // we need decide when do we want the "state" to change and what will happen- 
+  // Check the status of a single permission
+  // componentDidMount() { // we need decide when do we want the "state" to change and what will happen-
   //   // this.setState({lad,long: data});
   // }
 
-  SearchLocation(event){
-    event.preventDefault()
+  SearchLocation(event) {
+    event.preventDefault();
 
-    navigator.geolocation.getCurrentPosition( (data)=>{
-      let coords = data.coords;
-      if(!coords){
-        console.log("no position ☹️")
-        return
+    navigator.geolocation.getCurrentPosition(
+      data => {
+        let coords = data.coords;
+        if (!coords) {
+          console.log("no position ☹️");
+          return;
+        }
+        let lat = coords.latitude;
+        let long = coords.longitude;
+        console.log(`Lat: ${lat} | lon: ${long}`);
+        // let {data}?? -yp
+        //  set radius
+        axios
+          .get(
+            `https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=` +
+              lat +
+              `,` +
+              long +
+              `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`
+          )
+          .then(function(response) {
+            console.log(response);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      },
+      error => {
+        // if error
       }
-      let lat = coords.latitude;
-      let long = coords.longitude;
-      console.log(`Lat: ${lat} | lon: ${long}`)
-      // let {data}?? -yp
-      //  set radius
-      axios
-        .get(`https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=`+lat+`,`+long+`&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`)
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+    );
 
-    },(error)=>{
-      // if error
-    });
-    
     Geocode.fromAddress(" ").then(
       response => {
         const { lat, lng } = response.results[0].geometry.location;
@@ -72,24 +78,19 @@ class EventForm extends Component {
         console.error(error);
       }
     );
-
   }
-  
 
-  handleInputChange(event){
-    console.log(event.target.value)
+  handleInputChange(event) {
+    console.log(event.target.value);
     this.setState({
       zipCode: event.target.value
-    })
+    });
   }
 
-  
   render() {
-
     // this.location =this.props.coords;??? self suggestion -yp
 
     return (
-
       //  <Geolocated geolocated={this.state.geolocated}></Geolocated> -yp
       <div className="EvenFormContainer">
         <form className="EventForm" onSubmit={this.SearchLocation}>
@@ -102,20 +103,20 @@ class EventForm extends Component {
               type="text"
               name="search"
               min="0"
-              pattern="[0-9]{5}"              
+              pattern="[0-9]{5}"
+              maxLength="5"
               onChange={this.handleInputChange}
             />
           </label>
-           <button className="btn" type="submit">
-                  {this.state.isClickedOn ? 'ON' : 'OFF'}
-                   search
+          <button className="btn" type="submit">
+            {this.state.isClickedOn ? "ON" : "OFF"}
+            search
           </button>
         </form>
       </div>
     );
   }
 }
-
 
 // export default geolocated({
 //   positionOptions: {
