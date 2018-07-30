@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import EventForm from "./components/EventForm";
-import {BrowserRouter,Route} from "react-router-dom"
-import Footer from "./components/Footer";
+import {BrowserRouter,Route} from "react-router-dom";
+import EventList from "./components/EventList";
+import Footer from "./components/Footer"
 
 class App extends Component {
-
-  
   render() {
     let message = "";
     return (
@@ -18,16 +17,18 @@ class App extends Component {
         </p>
 
         <BrowserRouter>
+        <div>
           <Route exact path="/" component={EventForm}/>
           <Route path = "/EventsList" component={EventList} />
+        </div>  
         </BrowserRouter>
         <Footer />
+
         
+
       </div>
     );
   }
 }
-
-
 
 export default App;
