@@ -101,7 +101,7 @@ class EventForm extends Component {
               placeholder="Zip Code"
               type="text"
               name="search"
-              min="0"
+              maxlength="5"
               pattern="[0-9]{5}"              
               onChange={this.handleInputChange}
             />

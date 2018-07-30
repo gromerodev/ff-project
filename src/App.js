@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import EventForm from "./components/EventForm";
-import logo from './logo.svg';
-import axios from "axios";
+import {BrowserRouter,Route} from "react-router-dom"
+import Footer from "./components/Footer";
 
 class App extends Component {
 
@@ -16,6 +16,12 @@ class App extends Component {
         <p className="App-intro">
           Welcome to On The Fly! Find an event near you!
         </p>
+
+        <BrowserRouter>
+          <Route exact path="/" component={EventForm}/>
+          <Route path = "/EventsList" component={EventList} />
+        </BrowserRouter>
+        <Footer />
         
       </div>
     );
