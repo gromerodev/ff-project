@@ -105,10 +105,8 @@ class EventForm extends Component {
   }
 
   render() {
-    // this.location =this.props.coords;??? self suggestion -yp
 
     return (
-      //  <Geolocated geolocated={this.state.geolocated}></Geolocated> -yp
       <div className="EvenFormContainer">
         <form className="EventForm" onSubmit={this.SearchLocation}>
           <h1 className="form-title">On The Fly</h1>
@@ -125,25 +123,25 @@ class EventForm extends Component {
               onChange={this.handleInputChange}
             />
           </label>
+        
           <form onSubmit>
-            <label />
-            <input class="btn2" type="submit" value="Search" />
+            <input className="btn2" type="submit" value="Search" />
           </form>
-          {/* <button className="btn" type="submit">
+          
+          <button className="btn" type="submit">
           <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
           <p id="message" ref={(message) => this._message = message}></p>
-            {this.state.isClickedOn ? "ON" : "OFF"}
             search
-          </button> */}
+          </button>
           {/* <Link to={`/EventList=${this.state.zipCode}`}>
             <button className="btn" type="submit">
               Search
             </button>
           </Link> */}
-          <ValidatedSubmit
+          {/* {/* <ValidatedSubmit
             valid={this.state.valid}
-            zipCode={this.state.zipCode}
-          />
+          //   zipCode={this.state.zipCode} */}
+          // /> */}
         </form>
       </div>
     );
@@ -156,6 +154,7 @@ const ValidatedSubmit = props => {
       <Link to={`/EventList=${props.zipCode}`}>
         <button className="btn" type="submit">
           Use my Location
+          
           {/* <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
           <p id="message" ref={(message) => this._message = message}></p> */}
         
