@@ -1,15 +1,7 @@
-import React, { Component } from 'react'
+import React from "react";
 
+const EventList = props => {
+  return <div className="" />;
+};
 
-class EventList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {  }
-    }
-    render() { 
-        return 
-        
-    }
-}
- 
 export default EventList;

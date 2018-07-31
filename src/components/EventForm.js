@@ -2,13 +2,16 @@ import React, { Component } from "react";
 import axios from "axios";
 import { geolocated } from "react-geolocated";
 import Geocode from "react-geocode";
+import { Link } from "react-router-dom";
+import { withRouter } from "react-router";
 
 class EventForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isClickedOn: false,
-      zipCode: 0
+      zipCode: 0,
+      valid: false
     };
 
     // binding
@@ -83,8 +86,17 @@ class EventForm extends Component {
   handleInputChange(event) {
     console.log(event.target.value);
     this.setState({
-      zipCode: event.target.value
+      zipCode: event.target.value,
+      valid: this.checkValid(event.target.value)
     });
+  }
+
+  checkValid(zip) {
+    // let someZip = ("" + zip).replace(/\D/g, "");
+    // console.log(someZip);
+    return (
+      zip != null && zip.length === 5 && /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zip)
+    );
   }
 
   render() {
@@ -99,7 +111,7 @@ class EventForm extends Component {
           <label className="EventFormLabel">
             <input
               className="search"
-              placeholder="Zip Code"
+              placeholder="Enter a valid ZipCode (ex. &quot;90210&quot;)"
               type="text"
               name="search"
               min="0"
@@ -108,15 +120,38 @@ class EventForm extends Component {
               onChange={this.handleInputChange}
             />
           </label>
-          <button className="btn" type="submit">
-            {this.state.isClickedOn ? "ON" : "OFF"}
-            search
-          </button>
+          {/* <Link to={`/EventList=${this.state.zipCode}`}>
+            <button className="btn" type="submit">
+              Search
+            </button>
+          </Link> */}
+          <ValidatedSubmit
+            valid={this.state.valid}
+            zipCode={this.state.zipCode}
+          />
         </form>
       </div>
     );
   }
 }
+
+const ValidatedSubmit = props => {
+  if (props.valid) {
+    return (
+      <Link to={`/EventList=${props.zipCode}`}>
+        <button className="btn" type="submit">
+          Search
+        </button>
+      </Link>
+    );
+  } else {
+    return (
+      <button className="btn" type="submit">
+        Search
+      </button>
+    );
+  }
+};
 
 // export default geolocated({
 //   positionOptions: {
@@ -124,4 +159,5 @@ class EventForm extends Component {
 //   },
 //   userDecisionTimeout: 1000,
 // })(EventForm);
-export default EventForm;
+
+export default withRouter(EventForm);
