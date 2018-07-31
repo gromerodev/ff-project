@@ -33,11 +33,13 @@ class EventForm extends Component {
       let item1 = responseArray[Math.floor(Math.random() * myarray.length)];
       let item2 = responseArray[Math.floor(Math.random() * myarray.length)];
       let item3 = responseArray[Math.floor(Math.random() * myarray.length)];
-
+        console.log("hiii")
       if(this._message != null){
 
         this._message.innerHTML= item1.value + item2 + item3;
       }
+      console.log(response)
+
     }
   }
   handleClick() {
@@ -45,17 +47,6 @@ class EventForm extends Component {
       isClickedOn: !prevState.isClickedOn
     }));
   }
-
-  // if we have time we will do state,zip,add
-  // state = {
-  //   address: {
-  //     zipcode: ""
-  //   }
-  // };
-  // Check the status of a single permission
-  // componentDidMount() { // we need decide when do we want the "state" to change and what will happen-
-  //   // this.setState({lad,long: data});
-  // }
 
   SearchLocation(event) {
     event.preventDefault();
@@ -138,17 +129,6 @@ class EventForm extends Component {
               onChange={this.handleInputChange}
             />
           </label>
-          <button className="btn" type="submit">
-          <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
-          <p id="message" ref={(message) => this._message = message}></p>
-            {this.state.isClickedOn ? "ON" : "OFF"}
-            search
-          </button>
-          {/* <Link to={`/EventList=${this.state.zipCode}`}>
-            <button className="btn" type="submit">
-              Search
-            </button>
-          </Link> */}
           <ValidatedSubmit
             valid={this.state.valid}
             zipCode={this.state.zipCode}
@@ -164,6 +144,8 @@ const ValidatedSubmit = props => {
     return (
       <Link to={`/EventList=${props.zipCode}`}>
         <button className="btn" type="submit">
+        <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
+          <p id="message" ref={(message) => this._message = message}></p>
           Search
         </button>
       </Link>
@@ -177,11 +159,5 @@ const ValidatedSubmit = props => {
   }
 };
 
-// export default geolocated({
-//   positionOptions: {
-//     enableHighAccuracy: false,
-//   },
-//   userDecisionTimeout: 1000,
-// })(EventForm);
 
 export default withRouter(EventForm);
