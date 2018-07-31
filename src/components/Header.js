@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 class Header extends Component {
   render() {
-    return <div class="Header" />;
+    return <div className="Header" />;
   }
 }
 

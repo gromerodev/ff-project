@@ -13,7 +13,6 @@ class App extends Component {
       <div className="App">
         <Header message={message} />
         <p className="App-intro">
-          Welcome to On The Fly! Find an event near you!
         </p>
 
         <BrowserRouter>

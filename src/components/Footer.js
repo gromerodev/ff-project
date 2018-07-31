@@ -4,9 +4,8 @@ class Footer extends Component {
   state = {};
   render() {
     return (
-      <div class="footer">
+      <div className="footer">
         <footer>
-          <p>TESTING 123</p>
         </footer>
       </div>
     );

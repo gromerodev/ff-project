@@ -3,6 +3,8 @@ import axios from "axios";
 import { geolocated } from "react-geolocated";
 import Geocode from "react-geocode";
 
+
+
 class EventForm extends Component {
   constructor(props) {
     super(props);
@@ -15,8 +17,26 @@ class EventForm extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.SearchLocation = this.SearchLocation.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.getValue = this.getValue.bind(this);
+
   }
 
+  getValue(response) {
+    let myarray= new Array("item1","item2","item3");
+    let random = myarray[Math.floor(Math.random() * myarray.length)];
+    //alert(random);
+    if(response != null){
+      let responseArray = response.data._embedded.events;
+      let item1 = responseArray[Math.floor(Math.random() * myarray.length)];
+      let item2 = responseArray[Math.floor(Math.random() * myarray.length)];
+      let item3 = responseArray[Math.floor(Math.random() * myarray.length)];
+
+      if(this._message != null){
+
+        this._message.innerHTML= item1.value + item2 + item3;
+      }
+    }
+  }
   handleClick() {
     this.setState(prevState => ({
       isClickedOn: !prevState.isClickedOn
@@ -36,7 +56,7 @@ class EventForm extends Component {
 
   SearchLocation(event) {
     event.preventDefault();
-
+    
     navigator.geolocation.getCurrentPosition(
       data => {
         let coords = data.coords;
@@ -57,9 +77,7 @@ class EventForm extends Component {
               long +
               `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`
           )
-          .then(function(response) {
-            console.log(response);
-          })
+          .then(this.getValue)
           .catch(function(error) {
             console.log(error);
           });
@@ -109,6 +127,8 @@ class EventForm extends Component {
             />
           </label>
           <button className="btn" type="submit">
+          <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
+          <p id="message" ref={(message) => this._message = message}></p>
             {this.state.isClickedOn ? "ON" : "OFF"}
             search
           </button>
