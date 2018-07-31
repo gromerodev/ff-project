@@ -4,6 +4,7 @@ import { geolocated } from "react-geolocated";
 import Geocode from "react-geocode";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
+import { isV4Format } from "ip";
 
 class EventForm extends Component {
   constructor(props) {
@@ -60,48 +61,20 @@ class EventForm extends Component {
     }));
   }
 
-  SearchLocation(event) {
+  async SearchLocation(event) {
     event.preventDefault();
-
-    navigator.geolocation.getCurrentPosition(
-      data => {
-        let coords = data.coords;
-        if (!coords) {
-          console.log("no position ☹️");
-          return;
-        }
-        let lat = coords.latitude;
-        let long = coords.longitude;
-        console.log(`Lat: ${lat} | lon: ${long}`);
-        // let {data}?? -yp
-        //  set radius
-        axios
-          .get(
-            `https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=` +
-              lat +
-              `,` +
-              long +
-              `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`
-          )
-          .then(this.getValue())
-          .catch(function(error) {
-            console.log(error);
-          });
-      },
-      error => {
-        // if error
-      }
-    );
-
-    Geocode.fromAddress().then(
-      response => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.log(lat, lng);
-      },
-      error => {
-        console.error(error);
-      }
-    );
+    try {
+      navigator.geolocation.getCurrentPosition(async data => {
+        let results = await axios.get( `https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=` +
+        data.coords.latitude +
+        `,` +
+        data.coords.longitude +
+        `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`);
+        this.getValue(results);
+      })
+    } catch(err) {
+      console.log(err.message);
+    }
   }
 
   handleInputChange(event) {
@@ -127,8 +100,14 @@ class EventForm extends Component {
         this.state.zipCode
     );
     console.log(data);
-    let lat = data.results[0].geometry.location.lat;
-    let long = data.results[0].geometry.location.lng;
+    
+    
+    if(data.results.length === 0){
+     console.log(`Please enter a vaild ZIPCODE`)
+    } else {
+      let lat = data.results[0].geometry.location.lat;
+      let long = data.results[0].geometry.location.lng;
+    
 
     if (!lat || !long) {
       console.log("no position ☹️");
@@ -149,6 +128,7 @@ class EventForm extends Component {
         console.log(error);
       });
     this.getValue(response);
+    }
   }
   render() {
     return (
