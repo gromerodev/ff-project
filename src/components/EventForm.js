@@ -22,20 +22,36 @@ class EventForm extends Component {
     this.searchByZip = this.searchByZip.bind(this);
   }
 
+  getRandomActivity(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+
   getValue(response) {
-    let myarray = new Array("item1", "item2", "item3");
+    let myarray = [];
     let random = myarray[Math.floor(Math.random() * myarray.length)];
-    //alert(random);
     if (response != null) {
       let responseArray = response.data._embedded.events;
-      let item1 = responseArray[Math.floor(Math.random() * myarray.length)];
-      let item2 = responseArray[Math.floor(Math.random() * myarray.length)];
-      let item3 = responseArray[Math.floor(Math.random() * myarray.length)];
+      //response.data._embedded.events.forEach(i => {
+      //console.log(i.dates.start.localDate);
+      if (response.data._embedded.events) {
+        let activityOne = responseArray.splice(
+            this.getRandomActivity(responseArray.length - 1),
+            1
+          )[0],
+          activityTwo = responseArray.splice(
+            this.getRandomActivity(responseArray.length - 1),
+            1
+          )[0],
+          activityThree = responseArray.splice(
+            this.getRandomActivity(responseArray.length - 1),
+            1
+          )[0];
 
-      if (this._message != null) {
-        this._message.innerHTML = item1.value + item2 + item3;
+        myarray.push(activityOne, activityTwo, activityThree);
+        console.log(myarray);
       }
-      console.log("Response Array:", item1, item2, item3);
+
+      //})
     }
   }
   handleClick() {
@@ -44,17 +60,7 @@ class EventForm extends Component {
     }));
   }
 
-  // if we have time we will do state,zip,add
-  // state = {
-  //   address: {
-  //     zipcode: ""
-  //   }
-  // };
-  // Check the status of a single permission
-  // componentDidMount() { // we need decide when do we want the "state" to change and what will happen-
-  //   // this.setState({lad,long: data});
-  // }
-  SearchLocation(event, findByZip) {
+  SearchLocation(event) {
     event.preventDefault();
 
     navigator.geolocation.getCurrentPosition(
@@ -145,10 +151,7 @@ class EventForm extends Component {
     this.getValue(response);
   }
   render() {
-    // this.location =this.props.coords;??? self suggestion -yp
-
     return (
-      //  <Geolocated geolocated={this.state.geolocated}></Geolocated> -yp
       <div className="EvenFormContainer">
         <form className="EventForm" onSubmit={this.SearchLocation}>
           <h1 className="form-title">On The Fly</h1>
@@ -175,9 +178,8 @@ class EventForm extends Component {
           {/* <button className="btn" type="submit">
           <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
           <p id="message" ref={(message) => this._message = message}></p>
-            {this.state.isClickedOn ? "ON" : "OFF"}
             search
-          </button> */}
+          </button>
           {/* <Link to={`/EventList=${this.state.zipCode}`}>
             <button className="btn" type="submit">
               Search
@@ -199,6 +201,8 @@ const ValidatedSubmit = props => {
       <Link to={`/EventList=${props.zipCode}`}>
         <button className="btn" type="submit">
           Use my Location
+          {/* <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
+          <p id="message" ref={(message) => this._message = message}></p> */}
         </button>
       </Link>
     );
@@ -210,12 +214,5 @@ const ValidatedSubmit = props => {
     );
   }
 };
-
-// export default geolocated({
-//   positionOptions: {
-//     enableHighAccuracy: false,
-//   },
-//   userDecisionTimeout: 1000,
-// })(EventForm);
 
 export default withRouter(EventForm);
