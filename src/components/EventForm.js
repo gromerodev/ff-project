@@ -19,6 +19,7 @@ class EventForm extends Component {
     this.SearchLocation = this.SearchLocation.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.getValue = this.getValue.bind(this);
+    this.searchByZip = this.searchByZip.bind(this);
   }
 
   getValue(response) {
@@ -34,6 +35,7 @@ class EventForm extends Component {
       if (this._message != null) {
         this._message.innerHTML = item1.value + item2 + item3;
       }
+      console.log("Response Array:", item1, item2, item3);
     }
   }
   handleClick() {
@@ -52,8 +54,7 @@ class EventForm extends Component {
   // componentDidMount() { // we need decide when do we want the "state" to change and what will happen-
   //   // this.setState({lad,long: data});
   // }
-
-  SearchLocation(event) {
+  SearchLocation(event, findByZip) {
     event.preventDefault();
 
     navigator.geolocation.getCurrentPosition(
@@ -76,7 +77,7 @@ class EventForm extends Component {
               long +
               `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`
           )
-          .then(this.getValue)
+          .then(this.getValue())
           .catch(function(error) {
             console.log(error);
           });
@@ -86,7 +87,7 @@ class EventForm extends Component {
       }
     );
 
-    Geocode.fromAddress(" ").then(
+    Geocode.fromAddress().then(
       response => {
         const { lat, lng } = response.results[0].geometry.location;
         console.log(lat, lng);
@@ -106,13 +107,43 @@ class EventForm extends Component {
   }
 
   checkValid(zip) {
-    // let someZip = ("" + zip).replace(/\D/g, "");
     // console.log(someZip);
     return (
       zip != null && zip.length === 5 && /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zip)
     );
   }
 
+  async searchByZip(event) {
+    event.preventDefault();
+    console.log(this.state.zipCode);
+    let { data } = await axios.get(
+      "http://maps.googleapis.com/maps/api/geocode/json?address=" +
+        this.state.zipCode
+    );
+    console.log(data);
+    let lat = data.results[0].geometry.location.lat;
+    let long = data.results[0].geometry.location.lng;
+
+    if (!lat || !long) {
+      console.log("no position ☹️");
+      return;
+    }
+    console.log(`Lat: ${lat} | lon: ${long}`);
+    // let {data}?? -yp
+    //  set radius
+    let response = await axios
+      .get(
+        `https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=` +
+          lat +
+          `,` +
+          long +
+          `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`
+      )
+      .catch(function(error) {
+        console.log(error);
+      });
+    this.getValue(response);
+  }
   render() {
     // this.location =this.props.coords;??? self suggestion -yp
 
@@ -134,10 +165,13 @@ class EventForm extends Component {
               onChange={this.handleInputChange}
             />
           </label>
-          <form onSubmit>
-            <label />
-            <input class="btn2" type="submit" value="Search" />
-          </form>
+          <input
+            onClick={this.searchByZip}
+            className="btn2"
+            type="button"
+            value="Search"
+            id="search-by-zip"
+          />
           {/* <button className="btn" type="submit">
           <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
           <p id="message" ref={(message) => this._message = message}></p>
