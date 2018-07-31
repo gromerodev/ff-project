@@ -21,21 +21,26 @@ class EventForm extends Component {
     this.getValue = this.getValue.bind(this);
   }
 
-  getValue(response) {
-    let myarray = new Array("item1", "item2", "item3");
-    let random = myarray[Math.floor(Math.random() * myarray.length)];
-    //alert(random);
-    if (response != null) {
-      let responseArray = response.data._embedded.events;
-      let item1 = responseArray[Math.floor(Math.random() * myarray.length)];
-      let item2 = responseArray[Math.floor(Math.random() * myarray.length)];
-      let item3 = responseArray[Math.floor(Math.random() * myarray.length)];
+   getRandomActivity(max) {
+     return Math.floor(Math.random() * Math.floor(max));
+   }
 
-      if (this._message != null) {
-        this._message.innerHTML = item1.value + item2 + item3;
-      }
-      console.log(response)
+   getValue(response) {
+     let myarray = [];
+     let random = myarray[Math.floor(Math.random() * myarray.length)];
+     if (response != null) {
+       let responseArray = response.data._embedded.events;
+       //response.data._embedded.events.forEach(i => {
+         //console.log(i.dates.start.localDate);
+       if (response.data._embedded.events) {
+       let activityOne = responseArray.splice(this.getRandomActivity(responseArray.length -1), 1)[0],
+          activityTwo = responseArray.splice(this.getRandomActivity(responseArray.length -1), 1)[0],
+           activityThree = responseArray.splice(this.getRandomActivity(responseArray.length -1), 1)[0]
 
+myarray.push(activityOne, activityTwo, activityThree)
+        }
+        console.log(activityOne.name)
+      //})
     }
   }
   handleClick() {
@@ -158,7 +163,7 @@ const ValidatedSubmit = props => {
           Use my Location
           {/* <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
           <p id="message" ref={(message) => this._message = message}></p> */}
-        
+
 
         </button>
       </Link>
