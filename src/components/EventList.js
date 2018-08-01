@@ -9,16 +9,19 @@ class EventList extends Component {
 
   }
 
-  comp
 
   render() {
     console.log("props",this.props)
-  console.log("state",this.state)
+    console.log("state",this.state)
+    console.log('hello world')
+    
     return (
       <div>
-      <p>{this.props.eventName}</p>
-      <p>{this.props.eventName}</p>
-</div> ) }
+        <p>hello world{this.props.eventName}</p>
+        <p>{this.props.eventName}</p>
+      </div>
+    )
+  }
 }
 
 //   break;omponent
@@ -31,6 +34,5 @@ class EventList extends Component {
 //   </div>
 //
 // };
-
 
 export default EventList;
