@@ -5,7 +5,10 @@ import Geocode from "react-geocode";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { isV4Format } from "ip";
+<<<<<<< HEAD
 import EventList from "./EventList"
+=======
+>>>>>>> 9f03b20824469208fa8ce960e0cb82837e6bbd38
 
 class EventForm extends Component {
   constructor(props) {
@@ -30,6 +33,7 @@ class EventForm extends Component {
   }
 
   getValue(response) {
+<<<<<<< HEAD
     let myEventsArray = [];
     let myarray = [];
     let random = myarray[this.getRandomActivity(myarray.length)];
@@ -50,10 +54,38 @@ class EventForm extends Component {
   //return (
   //  this.setState({results: event_results})
       //   )
+=======
+    let myarray = [];
+    let random = myarray[Math.floor(Math.random() * myarray.length)];
+    if (response != null) {
+      let responseArray = response.data._embedded.events;
+      //response.data._embedded.events.forEach(i => {
+      //console.log(i.dates.start.localDate);
+      if (response.data._embedded.events) {
+        let activityOne = responseArray.splice(
+            this.getRandomActivity(responseArray.length - 1),
+            1
+          )[0],
+          activityTwo = responseArray.splice(
+            this.getRandomActivity(responseArray.length - 1),
+            1
+          )[0],
+          activityThree = responseArray.splice(
+            this.getRandomActivity(responseArray.length - 1),
+            1
+          )[0];
+
+        myarray.push(activityOne, activityTwo, activityThree);
+        console.log(myarray);
+      }
+
+      //})
+>>>>>>> 9f03b20824469208fa8ce960e0cb82837e6bbd38
     }
   }
 }
 
+<<<<<<< HEAD
 handleClick() {
   this.setState(prevState => ({
     isClickedOn: !prevState.isClickedOn
@@ -106,6 +138,22 @@ async searchByZip(event) {
   if (!lat || !long) {
     console.log("no position ☹️");
     return;
+=======
+  async SearchLocation(event) {
+    event.preventDefault();
+    try {
+      navigator.geolocation.getCurrentPosition(async data => {
+        let results = await axios.get( `https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=` +
+        data.coords.latitude +
+        `,` +
+        data.coords.longitude +
+        `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`);
+        this.getValue(results);
+      })
+    } catch(err) {
+      console.log(err.message);
+    }
+>>>>>>> 9f03b20824469208fa8ce960e0cb82837e6bbd38
   }
   console.log(`Lat: ${lat} | lon: ${long}`);
   // let {data}?? -yp
@@ -123,6 +171,7 @@ async searchByZip(event) {
     });
   this.getValue(response);
   }
+<<<<<<< HEAD
 }
 render() {
   return (
@@ -140,6 +189,92 @@ render() {
             pattern="[0-9]{5}"
             maxLength="5"
             onChange={this.handleInputChange}
+=======
+
+  checkValid(zip) {
+    // console.log(someZip);
+    return (
+      zip != null && zip.length === 5 && /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zip)
+    );
+  }
+
+  async searchByZip(event) {
+    event.preventDefault();
+    console.log(this.state.zipCode);
+    let { data } = await axios.get(
+      "http://maps.googleapis.com/maps/api/geocode/json?address=" +
+        this.state.zipCode
+    );
+    console.log(data);
+    
+    
+    if(data.results.length === 0){
+     console.log(`Please enter a vaild ZIPCODE`)
+    } else {
+      let lat = data.results[0].geometry.location.lat;
+      let long = data.results[0].geometry.location.lng;
+    
+
+    if (!lat || !long) {
+      console.log("no position ☹️");
+      return;
+    }
+    console.log(`Lat: ${lat} | lon: ${long}`);
+    // let {data}?? -yp
+    //  set radius
+    let response = await axios
+      .get(
+        `https://app.ticketmaster.com/discovery/v2/events.json?geoPoint=` +
+          lat +
+          `,` +
+          long +
+          `&radius=100&apikey=dDArWhA7pvjvWuFIsrdLTBUB3qjshF26`
+      )
+      .catch(function(error) {
+        console.log(error);
+      });
+    this.getValue(response);
+    }
+  }
+  render() {
+    return (
+      <div className="EvenFormContainer">
+        <form className="EventForm" onSubmit={this.SearchLocation}>
+          <h1 className="form-title">On The Fly</h1>
+          <h2>Search for events near you</h2>
+          <label className="EventFormLabel">
+            <input
+              className="search"
+              placeholder="Enter a valid ZipCode (ex. &quot;90210&quot;)"
+              type="text"
+              name="search"
+              min="0"
+              pattern="[0-9]{5}"
+              maxLength="5"
+              onChange={this.handleInputChange}
+            />
+          </label>
+          <input
+            onClick={this.searchByZip}
+            className="btn2"
+            type="button"
+            value="Search"
+            id="search-by-zip"
+          />
+          {/* <button className="btn" type="submit">
+          <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
+          <p id="message" ref={(message) => this._message = message}></p>
+            search
+          </button>
+          {/* <Link to={`/EventList=${this.state.zipCode}`}>
+            <button className="btn" type="submit">
+              Search
+            </button>
+          </Link> */}
+          <ValidatedSubmit
+            valid={this.state.valid}
+            zipCode={this.state.zipCode}
+>>>>>>> 9f03b20824469208fa8ce960e0cb82837e6bbd38
           />
         </label>
         <input
@@ -169,9 +304,24 @@ render() {
 }
 }
 const ValidatedSubmit = props => {
+<<<<<<< HEAD
 if (props.valid) {
   return (
     <Link to={`/EventList=${props.zipCode}`}>
+=======
+  if (props.valid) {
+    return (
+      <Link to={`/EventList=${props.zipCode}`}>
+        <button className="btn" type="submit">
+          Use my Location
+          {/* <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
+          <p id="message" ref={(message) => this._message = message}></p> */}
+        </button>
+      </Link>
+    );
+  } else {
+    return (
+>>>>>>> 9f03b20824469208fa8ce960e0cb82837e6bbd38
       <button className="btn" type="submit">
         Use my Location
         {/* <input type="button" id="btnSearch" value="Search" onClick= {this.getValue()} />
@@ -187,4 +337,8 @@ if (props.valid) {
   );
 }
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9f03b20824469208fa8ce960e0cb82837e6bbd38
 export default withRouter(EventForm);
