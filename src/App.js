@@ -16,7 +16,7 @@ class App extends Component {
 
         <div>
           <Route exact path="/" component={EventForm} />
-          <Route path="/EventsList" component={EventList} />
+          // <Route path="/EventsList" component={EventList} />
         </div>
 
         <Footer />
